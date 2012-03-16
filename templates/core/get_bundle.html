@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script src="/media/fancybox/jquery.fancybox.pack.js"></script>
+<link rel="stylesheet" href="/media/fancybox/jquery.fancybox.css" />
+<script type="text/javascript">
+	$(function(){
+		$(".fancybox").fancybox();
+
+		var undone = true;
+		
+        var reload = function() {
+        	undone = Boolean($(".thumbnail > img").size());
+            $.get(".").success(function(data, status, deffered){
+                //console.log('success', arguments);
+                var new_thumbs = $('.thumbnails', data);
+                $('.thumbnails').replaceWith(new_thumbs);
+            });
+            if (undone)
+                setTimeout(reload, 1000);
+            console.log(undone);
+        };
+        
+        reload();
+	});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<ul class="thumbnails">
+	{% for shot in bundle.screenshot_set.all %}
+        {% if shot.image %}
+            <li class="span3">
+                <div class="thumbnail">
+                    <a href="/media/{{ shot.image }}" class="fancybox" rel="thumbnails">
+                        <img src="/media/{{ shot.thumbnail }}" />
+                    </a>
+                    <strong>{{ shot.title|truncatewords:3 }}</strong><br />
+                    {{ shot.url }}<br />
+                    <em>Фотография сделана {{ shot.saved|date:"d F, H:i" }}</em>
+                </div>
+            </li>
+        {% else %}
+            <li class="span3"><div class="thumbnail">
+                <img src="/media/img/loading.gif" />
+                <strong>Ожидаем завершения загрузки</strong><br />
+                Это пример блока загрузки<br />
+                <em>Фотография еще не готова</em>
+            </li>
+        {% endif %}
+	{% endfor %}
+
+</ul>
+{% endblock %}

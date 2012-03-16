@@ -1,0 +1,8 @@
+Django ==1.2.5
+South
+selenium
+PIL
+celery
+django-celery
+django-celery-with-redis
+redis

@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="/media/css/bootstrap.min.css" />
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+    	<div class="container">
+			<div class="navbar">
+				<div class="navbar-inner">
+					<div class="container">
+						<ul class="nav">
+							<li><a class="brand" href="/">Shootr</a></li>
+							<li><a href="/">Фотографирую сайты. Дорого</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+    		{% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
