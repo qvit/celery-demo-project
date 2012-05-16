@@ -7,7 +7,7 @@ from shootr.core.tasks import make_screenshot
 
 
 class ScreenshotForm(forms.Form):
-    urls = forms.CharField(widget=forms.Textarea(attrs={'class': 'span12'}), label=u'Имена сайтов', )
+    urls = forms.CharField(widget=forms.Textarea(attrs={'class': 'span12'}), label=u'Адреса сайтов', )
 
     def clean_urls(self):
         urls = [
