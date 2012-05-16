@@ -1,0 +1,20 @@
+.bundle {
+	margin-bottom: 18px;
+	}
+	
+	.bundle-id,
+	.bundle-process {
+		display: none;
+		}
+		
+		.bundle-status div {
+			line-height: 30px;
+			}
+		
+		.loading {
+			background: url("/media/img/loading.gif") no-repeat;
+			padding-left: 40px;
+			}
+			
+		.result {
+			}

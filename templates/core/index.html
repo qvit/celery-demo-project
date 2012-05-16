@@ -1,14 +1,55 @@
 {% extends "base.html" %}
-{% block content %}
 
-<div class="alert alert-info">
-	Привет. Я фотографирую сайты. Введи несколько адресов URL в поле, которое расположено ниже (по одному адресу
-	в каждой строке), и получи высококачественные скриншоты сайтов, которые будут сохранены в моей базе данных
-	навечно.
-</div>
-<form action="." method="POST">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit" class="btn-primary">Сфотографировать</button>
-</form>
+{% block head %}
+	<script type="text/javascript">
+		$(function(){
+			$(".bundle").each(function() {
+				var bundle_id = $(this).find(".bundle-id").html(),
+					bundle = $(this);
+				var check = function() {
+					var bundle_url = "/bundle/" + bundle_id + "/ .thumbnails"
+					bundle.find(".bundle-process").load(bundle_url);
+					var loaded = Boolean(bundle.find(".thumbnail").size()),
+						undone = Boolean(bundle.find(".thumbnail > img").size());
+					if (!loaded || undone)
+		                setTimeout(check, 1000);
+					else {
+						bundle.find(".bundle-status").html(
+							'<div class="ready">' +
+								'<a href="' + bundle_url + '" target="_blank">Результат</a>' +
+							'</div>'
+						);
+					}
+				};
+				check();
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	{% for bundle in bundle_list %}
+		<div class="bundle">
+			<div class="bundle-id">{{ bundle.id }}</div>
+			<div class="bundle-process"></div>
+			<div class="bundle-status">
+	        	<div class="loading">
+	        		Скриншотики делаются...
+	        	</div>
+			</div>
+		</div>
+	{% endfor %}
+	<div class="alert alert-info">
+		Привет. Я фотографирую сайты. Введи несколько адресов URL в поле, которое расположено ниже (по одному адресу
+		в каждой строке), и получи высококачественные скриншоты сайтов, которые будут сохранены в моей базе данных
+		навечно.
+	</div>
+	<form action="." method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		{% for bundle in bundle_list %}
+			<input type="hidden" name="bundle{{ forloop.counter }}" value="{{ bundle.id }}"/>
+		{% endfor %}
+		<button type="submit" class="btn-primary">Сфотографировать</button>
+	</form>
 {% endblock %}

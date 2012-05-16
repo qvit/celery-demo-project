@@ -35,10 +35,18 @@ class ScreenshotForm(forms.Form):
 
 def index(request):
     form = ScreenshotForm(request.POST or None)
+    bundle_list = []
+    bundle_no = 1
+    bundle_key = 'bundle%d' % bundle_no
+    while bundle_key in request.POST:
+        bundle_list.append(Bundle.objects.get(id=request.POST.get(bundle_key)))
+        bundle_no += 1
+        bundle_key = 'bundle%d' % bundle_no
     if form.is_valid():
         bundle = form.save()
-        return redirect('get_bundle', bundle.id)
-    return render_to_response('core/index.html', {'form': form})
+        bundle_list.append(bundle)
+        form = ScreenshotForm()
+    return render_to_response('core/index.html', {'form': form, 'bundle_list': bundle_list})
 
 
 def get_bundle(request, bundle_id):
