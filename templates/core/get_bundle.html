@@ -1,29 +1,27 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script src="/media/fancybox/jquery.fancybox.pack.js"></script>
-<link rel="stylesheet" href="/media/fancybox/jquery.fancybox.css" />
-<script type="text/javascript">
-	$(function(){
-		$(".fancybox").fancybox();
-
-		var undone = true;
-		
-        var reload = function() {
-        	undone = Boolean($(".thumbnail > img").size());
-            $.get(".").success(function(data, status, deffered){
-                //console.log('success', arguments);
-                var new_thumbs = $('.thumbnails', data);
-                $('.thumbnails').replaceWith(new_thumbs);
-            });
-            if (undone)
-                setTimeout(reload, 1000);
-            console.log(undone);
-        };
-        
-        reload();
-	});
-</script>
+	<script src="/media/fancybox/jquery.fancybox.pack.js"></script>
+	<link rel="stylesheet" href="/media/fancybox/jquery.fancybox.css" />
+	<script type="text/javascript">
+		$(function(){
+			$(".fancybox").fancybox();
+	
+			var undone = true;
+			
+	        var reload = function() {
+	        	undone = Boolean($(".thumbnail > img").size());
+	            $.get(".").success(function(data, status, deffered){
+	                var new_thumbs = $('.thumbnails', data);
+	                $('.thumbnails').replaceWith(new_thumbs);
+	            });
+	            if (undone)
+	                setTimeout(reload, 1000);
+	        };
+	        
+	        reload();
+		});
+	</script>
 {% endblock %}
 
 {% block content %}
