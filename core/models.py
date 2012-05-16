@@ -4,17 +4,8 @@ import hashlib
 import socket
 from django.db import models
 from settings import UPLOAD_DIR
-from celery.task.control import inspect
 
 class Bundle(models.Model):
-
-    def undone(self):
-        i = inspect()
-        active = i.active()
-        if active[socket.gethostname()]:
-            return ""
-        else:
-            return "True"
 
     def __unicode__(self):
         return u'Bundle %d' % self.id
