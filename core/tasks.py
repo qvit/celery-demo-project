@@ -7,26 +7,33 @@ import datetime
 import os
 import tempfile
 
+fileformat = '.png'
+thumb_width = 260
+thumb_height = 180
+
 @task
 def make_screenshot(screenshot):
-    # get screenshot
+    shot = get_screenshot(screenshot)
+    screenshot.image.save(shot.name, shot)
+    thumb = make_thumbnail(shot)
+    screenshot.thumbnail.save(thumb.name, thumb)
+
+def get_screenshot(screenshot):
     driver = webdriver.Firefox()
     driver.get(screenshot.url)
-    fd, filename = tempfile.mkstemp('.png')
+    fd, filename = tempfile.mkstemp(fileformat)
     os.close(fd)
     driver.save_screenshot(filename)
     driver.close()
-    # save title, saved date and image
     screenshot.title = driver.title
     screenshot.saved = datetime.datetime.now()
-    fileobj = File(open(filename))
-    screenshot.image.save(filename, fileobj)
-    # save thumbnail
-    fd2, thumbnail_filename = tempfile.mkstemp('.png')
-    os.close(fd2)
-    image = Image.open(filename)
-    cropped = image.crop((0, 0, 260*2, 180*2))
-    cropped.thumbnail((260, 180), Image.ANTIALIAS)
+    return File(open(filename))
+
+def make_thumbnail(shot):
+    fd, thumbnail_filename = tempfile.mkstemp(fileformat)
+    os.close(fd)
+    image = Image.open(shot.name)
+    cropped = image.crop((0, 0, thumb_width*2, thumb_height*2))
+    cropped.thumbnail((thumb_width, thumb_height), Image.ANTIALIAS)
     cropped.save(thumbnail_filename)
-    fileobj = File(open(thumbnail_filename))
-    screenshot.thumbnail.save(thumbnail_filename, fileobj)
+    return File(open(thumbnail_filename))
